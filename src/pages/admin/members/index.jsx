@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import jwt from "jsonwebtoken";
 import { parseCookies } from "nookies"; // Utility for parsing cookies in Next.js
-
+import Link from "next/link";
 export async function getServerSideProps(context) {
   const cookies = parseCookies(context);
   const token = cookies.token;
@@ -75,6 +75,12 @@ export default function MembersList() {
             <img src={member.image_url} alt={member.name} />
             <h2 className="text-xl">{member.name}</h2>
             {/* Display other member details */}
+            <Link
+              href={`/admin/members/edit?id=${member.id}`}
+              className="text-blue-500"
+            >
+              Edit
+            </Link>
             <button
               onClick={() => handleDelete(member.id)}
               className="mt-2 ml-[10px] text-red-500"

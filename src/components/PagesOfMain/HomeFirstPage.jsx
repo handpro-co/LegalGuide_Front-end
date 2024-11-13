@@ -36,7 +36,7 @@ const HomeFirstPage = () => {
         src={RadialBannerPhoto.src}
         alt=""
       />
-      <div className=" h-[83vh] mt-[100px] flex flex-col items-center justify-center gap-[40px] rounded-[50px] z-[1] homepageBg">
+      <div className="w-full h-[83vh] mt-[100px] flex flex-col items-center justify-center gap-[40px] rounded-[50px] z-[1] homepageBg">
         <div className="flex gap-[16px] items-center flex-col">
           <div>
             <div className="text-[#226FD8] text-[42px] lg:text-[74px] md:text-[64px] lg:leading-[90px]  text-center font-bold">

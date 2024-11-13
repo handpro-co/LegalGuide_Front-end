@@ -1,13 +1,21 @@
 import { useRouter } from "next/router";
-import membersData from "../components/mockDatas/membersData";
-
+import { useState, useEffect } from "react";
 const AboutMemberPage = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const memberdata = membersData();
+  const [memberData, setMemberData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch("/api/members");
+      const result = await res.json();
+      setMemberData(result);
+    };
 
-  const member = memberdata.find((member) => member.id === id);
+    fetchData();
+  }, []);
+
+  const member = memberData.find((member) => member.id === id);
 
   if (!member) {
     return <div>Loading...</div>;
@@ -66,7 +74,7 @@ const AboutMemberPage = () => {
                 Оролцсон сургалт, хөтөлбөрүүд
               </div>
               <div className="text-[15px] font-regular text-[#444444] break-words">
-                {member.training  }
+                {member.training}
               </div>
             </div>
           </div>

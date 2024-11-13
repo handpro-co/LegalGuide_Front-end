@@ -21,7 +21,6 @@ export default function AdminSignIn() {
     const data = await response.json();
 
     if (response.ok) {
-      document.cookie = `token=${data.token}; path=/; HttpOnly; Secure`;
       router.push("/admin/OptionBoard");
     } else {
       setError(data.message || "Login failed");

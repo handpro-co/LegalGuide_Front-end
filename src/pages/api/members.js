@@ -17,13 +17,12 @@ const s3 = new AWS.S3({
 
 export const config = {
   api: {
-    bodyParser: false, // Disable body parser to handle file uploads
+    bodyParser: false, 
   },
 };
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
-    // Handle GET request to fetch all members
     try {
       const data = await sql`SELECT * FROM members`;
       if (data.length === 0) {

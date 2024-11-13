@@ -7,9 +7,8 @@ const News = () => {
   const [onClickButton, setOnClickButton] = useState("Хуульч мазаалай");
   const [showNews, setShowNews] = useState([]);
   const [mockData, setMockData] = useState([]);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true); 
 
-  // Fetch data from the API
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -23,13 +22,12 @@ const News = () => {
       } catch (error) {
         console.error("Error fetching news:", error);
       } finally {
-        setLoading(false); // Set loading to false when done
+        setLoading(false); 
       }
     };
     fetchProjects();
   }, []);
 
-  // Filter news based on selected category
   useEffect(() => {
     if (mockData && mockData.length > 0) {
       const filteredNews = mockData.filter(
@@ -49,7 +47,6 @@ const News = () => {
     return (
       <div className="flex justify-center items-center h-screen">
         <span>Loading...</span>{" "}
-        {/* You can replace this with a loading spinner */}
       </div>
     );
   }
@@ -67,7 +64,6 @@ const News = () => {
           Мэдээ мэдээлэл
         </h1>
 
-        {/* Category buttons */}
         <div className="flex flex-wrap justify-center gap-2">
           {categories.map((type) => (
             <button
@@ -84,7 +80,6 @@ const News = () => {
           ))}
         </div>
 
-        {/* Display filtered news */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {showNews.length > 0 ? (
             showNews.map((item) => (

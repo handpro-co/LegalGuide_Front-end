@@ -1,23 +1,18 @@
 import ButtonNoBGColor from "../layout/ButtonNoBGColor";
-import showcaseBoxData from "../mockDatas/showcaseBoxData";
 import ShowCaseBox from "../layout/ShowCaseBox";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 const ShowCase = () => {
-  // const [casedata, setCasedata] = useState();
-  // // const mockData = showcaseBoxData();
+  const [casedata, setCasedata] = useState();
 
-  // useEffect(() => {
-  //   const fetchProjects = async () => {
-  //     const response = await fetch(
-  //       "http://localhost:3000/api/previous-projects"
-  //     );
-  //     const data = await response.json();
-  //     setCasedata(data);
-  //   };
-  //   fetchProjects();
-  // }, []);
-
-  // console.log("data: ", casedata);
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const response = await fetch("/api/previous-projects");
+      const data = await response.json();
+      setCasedata(data);
+    };
+    fetchProjects();
+  }, []);
 
   return (
     <div className="flex flex-col gap-[80px]   mx-auto">
@@ -30,10 +25,12 @@ const ShowCase = () => {
             Бидэнтэй холбогдож хууль зүйн мэргэжлийн үйлчилгээ аваарай.
           </div>
         </div>
-        <ButtonNoBGColor text={"Бүгдийн харах"} />
+        <Link href={"./PeriviousProjects"}>
+          <ButtonNoBGColor text={"Бүгдийн харах"} />
+        </Link>
       </div>
-      {/* <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-[40px]">
-        {casedata &&  (
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-[40px]">
+        {casedata &&
           casedata.map((item, i) => (
             <div key={i}>
               <ShowCaseBox
@@ -42,9 +39,8 @@ const ShowCase = () => {
                 photo={item.image_url}
               />
             </div>
-          ))
-        ) }
-      </div> */}
+          ))}
+      </div>
     </div>
   );
 };

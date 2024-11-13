@@ -1,11 +1,20 @@
 import Button from "../layout/Button";
 import MemberCard from "../layout/MemberCard";
 import Link from "next/link";
-import membersData from "../mockDatas/membersData";
+import { useEffect, useState } from "react";
 
 const PhotoOfUs = () => {
-  const poeplesData = membersData();
-  console.log(poeplesData);
+  const [memberData, setMemberData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch("/api/members", { method: "GET" });
+      const result = await res.json();
+      setMemberData(result);
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="w-full flex justify-center items-center">
@@ -17,20 +26,25 @@ const PhotoOfUs = () => {
           <Button text={"Дэлгэрэнгүй харах"} />
         </div>
         <div className="w-full flex gap-[24px] flex-wrap justify-center reveal">
-          {poeplesData.map((item) => (
-            <Link key={item.id} href={`./AboutMemberPage?id=${item.id}`}>
-              <div className=" w-full">
-                <MemberCard
-                  photo={item.image_url}
-                  name={item.name}
-                  position={item.position}
-                />
-              </div>
-            </Link>
-          ))}
+          {memberData.length > 0 ? (
+            memberData.map((item) => (
+              <Link key={item.id} href={`./AboutMemberPage?id=${item.id}`}>
+                <div className="w-full">
+                  <MemberCard
+                    photo={item.image_url}
+                    name={item.name}
+                    position={item.position}
+                  />
+                </div>
+              </Link>
+            ))
+          ) : (
+            <div>No Data</div>
+          )}
         </div>
       </div>
     </div>
   );
 };
+
 export default PhotoOfUs;

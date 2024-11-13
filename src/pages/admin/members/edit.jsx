@@ -1,32 +1,28 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
-import { parseCookies } from "nookies"; // Utility for parsing cookies in Next.js
+import { parseCookies } from "nookies";
 
 export async function getServerSideProps(context) {
   const cookies = parseCookies(context);
   const token = cookies.token;
 
-  // If there is no token, redirect to the sign-in page
   if (!token) {
     return {
       redirect: {
-        destination: "/admin", // Redirect to the login page
+        destination: "/admin",
         permanent: false,
       },
     };
   }
 
   try {
-    // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // If token is valid, pass the user data to the page
     return {
-      props: { user: decoded }, // You can pass the user data if needed
+      props: { user: decoded },
     };
   } catch (error) {
-    // If the token is invalid, redirect to the login page
     return {
       redirect: {
         destination: "/admin",
@@ -36,7 +32,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default function EditMember() {
+export default function EditMember({ user }) {
   const router = useRouter();
   const { id } = router.query;
 
@@ -83,7 +79,6 @@ export default function EditMember() {
     e.preventDefault();
 
     const formData = new FormData();
-
     Object.keys(member).forEach((key) => {
       if (member[key] !== undefined) {
         formData.append(key, member[key]);
@@ -99,35 +94,82 @@ export default function EditMember() {
       body: formData,
     });
 
+    const responseData = await response.json();
     if (response.ok) {
       router.push("/admin/members");
     } else {
-      console.error("Error updating member");
+      console.error("Error updating member:", responseData.message);
     }
   };
 
   return (
-    <div className="p-6 mt-[180px]">
+    <form onSubmit={handleSubmit} className="p-6">
       <h1 className="text-2xl font-bold">Edit Member</h1>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          value={member.name}
-          onChange={handleChange}
-          required
-          placeholder="Name"
-          className="block border rounded p-2 w-full mt-4"
-        />
-        {/* Add the other fields similarly */}
-        <button
-          type="submit"
-          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Update Member
-        </button>
-      </form>
-    </div>
+      <input
+        type="text"
+        name="name"
+        value={member.name}
+        onChange={handleChange}
+        required
+        placeholder="Name"
+        className="block border rounded p-2 w-full mt-4"
+      />
+      <input
+        type="text"
+        name="position"
+        value={member.position}
+        onChange={handleChange}
+        placeholder="Position"
+        className="block border rounded p-2 w-full mt-4"
+      />
+      <textarea
+        name="introduction"
+        value={member.introduction}
+        onChange={handleChange}
+        placeholder="Introduction"
+        className="block border rounded p-2 w-full mt-4"
+      />
+      <textarea
+        name="education"
+        value={member.education}
+        onChange={handleChange}
+        placeholder="Education"
+        className="block border rounded p-2 w-full mt-4"
+      />
+      <textarea
+        name="specialization"
+        value={member.specialization}
+        onChange={handleChange}
+        placeholder="Specialization"
+        className="block border rounded p-2 w-full mt-4"
+      />
+      <textarea
+        name="publications"
+        value={member.publications}
+        onChange={handleChange}
+        placeholder="Publications"
+        className="block border rounded p-2 w-full mt-4"
+      />
+      <textarea
+        name="training"
+        value={member.training}
+        onChange={handleChange}
+        placeholder="Training"
+        className="block border rounded p-2 w-full mt-4"
+      />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+        className="block border rounded p-2 w-full mt-4"
+      />
+      <button
+        type="submit"
+        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+      >
+        Update Member
+      </button>
+    </form>
   );
 }

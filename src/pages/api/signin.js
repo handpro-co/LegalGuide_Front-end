@@ -45,20 +45,11 @@ export default async function handler(req, res) {
     );
 
     // Set the token in a cookie
-    const cookieOptions = {
-      Path: "/",
-      HttpOnly: true,
-      SameSite: "Strict",
-      // Conditionally set Secure flag for production environments only
-      Secure: process.env.NODE_ENV === "production",
-    };
-
-    res.setHeader(
-      "Set-Cookie",
-      `token=${token}; Path=${cookieOptions.Path}; HttpOnly; SameSite=${
-        cookieOptions.SameSite
-      }; ${cookieOptions.Secure ? "Secure;" : ""}`
-    );
+    res.setHeader("Set-Cookie", [
+      `token=${token}; Path=/; HttpOnly; SameSite=Strict; ${
+        process.env.NODE_ENV === "production" ? "Secure;" : ""
+      }`,
+    ]);
 
     res.status(200).json({ message: "Login successful" });
   } catch (error) {

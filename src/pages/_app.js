@@ -4,11 +4,21 @@ import Chatgpt from "../components/chatgpt/Chatgpt";
 import { Footer, Navigation } from "../components/fixedComponents";
 import "../styles/font.css";
 import { useRouter } from "next/router";
-
+import { useEffect } from "react";
 const App = ({ Component, pageProps }) => {
   const router = useRouter();
 
   const isAdminPage = router.pathname.startsWith("/admin");
+  useEffect(() => {
+    console.log(
+      "%cЗогс!",
+      "color:red;font-family:system-ui;font-size:4rem;-webkit-text-stroke: 1px black;font-weight:bold"
+    );
+    console.log(
+      "%cConsole Битгий ухаачээ хүүхдээ !!!",
+      "color:black;font-family:system-ui;font-size:1rem;-webkit-text-stroke: 1px black;font-weight:bold"
+    );
+  }, []);
 
   return (
     <>
@@ -41,7 +51,7 @@ const App = ({ Component, pageProps }) => {
       </Head>
       <div
         div
-        className="flex flex-col items-center gap-[100px] w-full px-[20px] md:px-[60px] lg:px-[120px]"
+        className="flex flex-col items-center gap-[100px] w-full px-[20px] md:px-[60px] lg:px-[120px] 2xl:px-[300px]"
       >
         {!isAdminPage && (
           <>

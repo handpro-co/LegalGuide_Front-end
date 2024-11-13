@@ -8,11 +8,10 @@ dotenv.config({ path: "./config/.env" });
 
 const sql = neon(process.env.DATABASE_URL);
 
-// Multer-ийн санхүүжилт (файлыг хүлээн авахад ашиглана)
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB-тай хязгаарлагдсан файл
+  limits: { fileSize: 10 * 1024 * 1024 },
 }).single("image");
 
 const s3 = new AWS.S3({
@@ -21,26 +20,24 @@ const s3 = new AWS.S3({
   region: process.env.AWS_REGION,
 });
 
-// AWS S3 руу файлыг ачаалах функц
 const uploadFile = async (file) => {
   const fileName = `${uuidv4()}-${file.originalname}`;
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: `projects/${fileName}`,
     Body: file.buffer,
-    ACL: "public-read", // Олон нийтэд нээлттэй
+    ACL: "public-read",
   };
 
   try {
     const s3Response = await s3.upload(params).promise();
-    return s3Response.Location; // Ачаалсан файлын URL буцаана
+    return s3Response.Location;
   } catch (error) {
     console.error("Error uploading to S3:", error);
     throw new Error("Error uploading to S3");
   }
 };
 
-// AWS S3-ээс файл устгах функц
 const deleteFile = async (imageUrl) => {
   const fileName = imageUrl.split("/").pop();
   const params = {
@@ -56,18 +53,15 @@ const deleteFile = async (imageUrl) => {
   }
 };
 
-// Body-parser-ийг хаах (Mulder-т файлыг зөв ачаалуулахын тулд)
 export const config = {
   api: {
-    bodyParser: false, // Multer ашиглахын тулд Next.js-ийн bodyParser-г хаана
+    bodyParser: false,
   },
 };
 
-// API хариулт боловсруулах
 export default async function handler(req, res) {
   const { id } = req.query;
 
-  // Multer-ийн файл хүлээн авах хэсэг
   upload(req, res, async (err) => {
     if (err) {
       console.error("Файл ачаалах алдаа:", err);
@@ -88,7 +82,6 @@ export default async function handler(req, res) {
       }
     }
     if (req.method === "POST") {
-      // POST хүсэлт: Шинэ төсөл үүсгэх
       const {
         project_name,
         brief_description,
@@ -106,8 +99,7 @@ export default async function handler(req, res) {
       }
 
       try {
-        const imageUrl = await uploadFile(req.file); // S3 руу зураг ачаалах
-
+        const imageUrl = await uploadFile(req.file);
         const query = await sql`
           INSERT INTO previous_projects (id, project_name, brief_description, issues, work_progress, results, statistics, image_url, project_date)
           VALUES (${uuidv4()}, ${project_name}, ${brief_description}, ${issues}, ${work_progress}, ${results}, ${statistics}, ${imageUrl}, ${project_date})
@@ -124,7 +116,6 @@ export default async function handler(req, res) {
     }
 
     if (req.method === "PUT" && id) {
-      // PUT хүсэлт: Төслийг шинэчлэх
       const {
         project_name,
         brief_description,
@@ -147,9 +138,9 @@ export default async function handler(req, res) {
 
         if (req.file) {
           if (imageUrl) {
-            await deleteFile(imageUrl); // Өмнөх зургыг S3-оос устгах
+            await deleteFile(imageUrl);
           }
-          imageUrl = await uploadFile(req.file); // Шинэ зураг ачаалах
+          imageUrl = await uploadFile(req.file);
         }
 
         await sql`
@@ -177,7 +168,6 @@ export default async function handler(req, res) {
     }
 
     if (req.method === "DELETE" && id) {
-      // DELETE хүсэлт: Төсөл устгах
       try {
         const project =
           await sql`SELECT * FROM previous_projects WHERE id = ${id} LIMIT 1`;
@@ -188,7 +178,7 @@ export default async function handler(req, res) {
 
         const imageUrl = project[0].image_url;
         if (imageUrl) {
-          await deleteFile(imageUrl); // Зургийг S3-оос устгах
+          await deleteFile(imageUrl);
         }
 
         await sql`DELETE FROM previous_projects WHERE id = ${id}`;

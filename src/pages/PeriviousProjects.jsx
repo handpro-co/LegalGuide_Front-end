@@ -12,6 +12,7 @@ const PeriviousProjects = () => {
     };
     fetchProjects();
   }, []);
+
   return (
     <>
       <img
@@ -36,7 +37,7 @@ const PeriviousProjects = () => {
                 </div>
               ))}
           </div>
-          {projects && projects.length > 3 ? (
+          {projects && projects.length > 0 ? (
             <button className="inline p-[10px] md:p-[12px] rounded-[10px] bg-[#444] text-[#fff] font-semibold hover:bg-opacity-[60%] hover:text-blue-300">
               Илүү ихийг
             </button>

@@ -4,7 +4,7 @@ import Bear from "../../homePagesPeoplesPhoto/940815d39d4270b76e723ef85105ecab.p
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:8080", {
+const socket = io("https://backendlg-kznv.onrender.com/", {
   transports: ["websocket"],
 });
 
@@ -35,7 +35,7 @@ const Chatgpt = () => {
     const lastIndex = messages.length - 1;
     const newMessages = [...messages];
 
-    const typing = (index, text, delay = 20) => {
+    const typing = (index, text, delay = 50) => {
       if (index < text.length) {
         newMessages[lastIndex].response += text.charAt(index);
         setMessages([...newMessages]);
@@ -47,14 +47,12 @@ const Chatgpt = () => {
   };
 
   useEffect(() => {
-    const handleResponse = (response) => {
+    socket.on("response", (response) => {
       typeResponse(response);
-    };
-
-    socket.on("response", handleResponse);
+    });
 
     return () => {
-      socket.off("response", handleResponse);
+      socket.off("response");
     };
   }, [messages]);
 
@@ -81,12 +79,14 @@ const Chatgpt = () => {
 
     return () => clearInterval(interval);
   }, []);
+
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
       sendMessage();
     }
   };
+
   return (
     <>
       {show ? (
