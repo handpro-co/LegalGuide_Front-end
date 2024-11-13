@@ -1,0 +1,102 @@
+/* fonts */
+
+@font-face {
+    font-family: 'GIP-Black';
+    src: url('/fonts/GIP-Black.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-Bold';
+    src: url('/fonts/GIP-Bold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-BlackItalic';
+    src: url('/fonts/GIP-BlackItalic.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-BoldItalic';
+    src: url('/fonts/GIP-BoldItalic.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-ExtraBold';
+    src: url('/fonts/GIP-ExtraBold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-ExtraBoldItalic';
+    src: url('/fonts/GIP-ExtraBoldItalic.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-Heavy';
+    src: url('/fonts/GIP-Heavy.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-HeavyItalic';
+    src: url('/fonts/GIP-HeavyItalic.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-Light';
+    src: url('/fonts/GIP-Light.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-LightItalic';
+    src: url('/fonts/GIP-LightItalic.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-Medium';
+    src: url('/fonts/GIP-Medium.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-MediumItalic';
+    src: url('/fonts/GIP-MediumItalic.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-Regular';
+    src: url('/fonts/GIP-Regular.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-RegularItalic';
+    src: url('/fonts/GIP-RegularItalic.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-SemiBold';
+    src: url('/fonts/GIP-SemiBold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-SemiBoldItalic';
+    src: url('/fonts/GIP-SemiBoldItalic.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-Thin';
+    src: url('/fonts/GIP-Thin.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-ThinItalic';
+    src: url('/fonts/GIP-ThinItalic.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-UltraLight';
+    src: url('/fonts/GIP-UltraLight.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GIP-UltraLightItalic';
+    src: url('/fonts/GIP-UltraLightItalic.otf') format('opentype');
+}
+

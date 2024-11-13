@@ -1,0 +1,9 @@
+export { default as Photo1 } from "./Photo1.png";
+export { default as Photo2 } from "./Photo2.png";
+export { default as Photo3 } from "./Photo3.png";
+export { default as Photo4 } from "./Photo4.png";
+export { default as Photo5 } from "./Photo5.png";
+export { default as Photo6 } from "./Photo6.png";
+export { default as Photo7 } from "./Photo7.png";
+export { default as Photo8 } from "./Photo8.png";
+export { default as Photo9 } from "./Photo9.png";

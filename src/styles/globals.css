@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  width: 100vw;
+}
+
+.icon45deg {
+  transition: all 0.2s;
+}
+button {
+  transition: all 0.5s;
+}
+button:hover .icon45deg {
+  transform: rotate(45deg);
+  margin-left: 10px;
+}
+.animatePage {
+  background: radial-gradient(
+    circle,
+    rgba(9, 9, 18, 0.3),
+    rgba(22, 25, 41, 0.7)
+  );
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.text-gradient {
+  background: linear-gradient(to right, rgb(0, 0, 0), #226fd8);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-size: 180% 100%;
+  transition: background-position 0.5s ease;
+}
+
+.text-gradient:hover {
+  background-position: -100% 0;
+}
+.parentHover {
+  cursor: pointer;
+}
+.text-borderHover {
+  transition: border 0.2s ease-in;
+}
+.image-colorHover {
+  transition: filter 0.2s ease-in;
+}
+.parentHover:hover .image-colorHover {
+  filter: grayscale();
+}
+.parentHover:hover .text-borderHover {
+  border: 0.5px solid #226fd8;
+}
+.homepageBg {
+  background: linear-gradient(to top, #c9deff, transparent 50%);
+}
+
+.gradient-background {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 0, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(0, 0, 255, 1) 100%
+  );
+  position: relative;
+}
+
+.separator {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 1);
+  transform: translateY(-50%);
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.hoverTitleOfService {
+}
+.serviceTitle {
+  transition: all 0.5s;
+}
+.hoverTitleOfService:hover .serviceTitle {
+  color: #226fd8;
+  margin-left: 10px;
+}
+.hoverTitleOfServiceGreen {
+}
+.serviceTitleGreen {
+  transition: all 0.5s;
+}
+.hoverTitleOfServiceGreen:hover .serviceTitleGreen {
+  color: #44d923;
+  margin-left: 10px;
+}
