@@ -35,6 +35,7 @@ export async function getServerSideProps(context) {
     };
   }
 }
+
 export default function ProjectsList() {
   const [projects, setProjects] = useState([]);
 
@@ -86,12 +87,27 @@ export default function ProjectsList() {
       >
         Add Project
       </Link>
-      <ul className="mt-6 flex gap-[20px]">
+
+      {/* Grid layout for projects */}
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {projects.map((project) => (
-          <li key={project.id} className="border-b py-4 w-[20%]">
-            <img src={project.image_url} alt={project.project_name} />
-            <h2 className="text-xl">{project.project_name}</h2>
-            <div className="flex gap-4">
+          <div
+            key={project.id}
+            className="border p-4 rounded-lg shadow-lg bg-white"
+          >
+            <img
+              src={project.image_url}
+              alt={project.project_name}
+              className="w-full h-40 object-cover rounded-t-lg"
+            />
+            <h2 className="text-xl font-semibold mt-4">
+              {project.project_name}
+            </h2>
+            <p className="text-gray-600 text-sm mt-2 line-clamp-3">
+              {project.brief_description}
+            </p>{" "}
+            {/* Limit to 3 lines */}
+            <div className="flex gap-4 mt-4">
               <Link
                 href={`/admin/projects/edit?id=${project.id}`}
                 className="text-blue-500"
@@ -105,9 +121,9 @@ export default function ProjectsList() {
                 Delete
               </button>
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

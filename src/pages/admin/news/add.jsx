@@ -1,32 +1,28 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
-import { parseCookies } from "nookies"; // Utility for parsing cookies in Next.js
+import { parseCookies } from "nookies";
 
 export async function getServerSideProps(context) {
   const cookies = parseCookies(context);
   const token = cookies.token;
 
-  // If there is no token, redirect to the sign-in page
   if (!token) {
     return {
       redirect: {
-        destination: "/admin", // Redirect to the login page
+        destination: "/admin",
         permanent: false,
       },
     };
   }
 
   try {
-    // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // If token is valid, pass the user data to the page
     return {
-      props: { user: decoded }, // You can pass the user data if needed
+      props: { user: decoded },
     };
   } catch (error) {
-    // If the token is invalid, redirect to the login page
     return {
       redirect: {
         destination: "/admin",
@@ -35,6 +31,7 @@ export async function getServerSideProps(context) {
     };
   }
 }
+
 const categories = [
   "Хуульч мазаалай",
   "Хуулийн талаар",
@@ -48,7 +45,7 @@ export default function AddNews() {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState(""); 
+  const [successMessage, setSuccessMessage] = useState("");
   const router = useRouter();
 
   const handleImageChange = (e) => {
@@ -90,24 +87,66 @@ export default function AddNews() {
           router.push("/admin/news");
         }, 1500);
       } else {
-        console.error("Error response:", responseData);
         setErrorMessage(responseData.message || "Failed to add news.");
         setSuccessMessage("");
       }
     } catch (error) {
-      console.error("Error:", error);
       setErrorMessage("There was an error submitting the form.");
       setSuccessMessage("");
     }
   };
 
-  return (
-    <form onSubmit={handleSubmit} className="p-6 mt-[180px]">
-      <h1 className="text-2xl font-bold">Add News</h1>
+  const addLink = (e) => {
+    e.preventDefault();
+    setDetails(
+      (prevDetails) =>
+        `${prevDetails}<a style="color: #0088ff; text-decoration: underline;" href='<YOUR_LINK_HERE>'>Click here for more information</a>`
+    );
+  };
 
-      {errorMessage && <div className="text-red-500 mt-2">{errorMessage}</div>}
+  const newLine = (e) => {
+    e.preventDefault();
+    setDetails((prevDetails) => `${prevDetails}<br/><br/>`);
+  };
+
+  const header = (e) => {
+    e.preventDefault();
+    setDetails(
+      (prevDetails) =>
+        `${prevDetails}<span style="font-size: 20px; font-weight: bold;">Гарчигаа бичих</span>`
+    );
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="w-full p-6 mt-8 max-w-3xl mx-auto flex flex-col items-center gap-4">
+      <div className="flex gap-4 mb-6 flex-wrap justify-center">
+        <button
+          onClick={addLink}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        >
+          Add Link
+        </button>
+        <button
+          onClick={newLine}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        >
+          New Line
+        </button>
+        <button
+          onClick={header}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        >
+          Add Header
+        </button>
+      </div>
+
+      <h1 className="text-3xl font-bold text-center mb-6">Add News</h1>
+
+      {errorMessage && (
+        <div className="text-red-500 mb-4 text-center">{errorMessage}</div>
+      )}
       {successMessage && (
-        <div className="text-green-500 mt-2">{successMessage}</div>
+        <div className="text-green-500 mb-4 text-center">{successMessage}</div>
       )}
 
       <input
@@ -116,19 +155,21 @@ export default function AddNews() {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
-        className="block border rounded p-2 w-full mt-4"
+        className="block border border-gray-300 rounded-lg p-3 w-4/5 mx-auto mb-4 text-lg"
       />
+
       <textarea
         placeholder="Details"
         value={details}
         onChange={(e) => setDetails(e.target.value)}
         required
-        className="block border rounded p-2 w-full mt-4"
+        className="block border border-gray-300 rounded-lg p-3 w-4/5 mx-auto mb-4 text-lg"
       />
+
       <select
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        className="block border rounded p-2 w-full mt-4"
+        className="block border border-gray-300 rounded-lg p-3 w-4/5 mx-auto mb-4 text-lg"
       >
         {categories.map((cat) => (
           <option key={cat} value={cat}>
@@ -140,7 +181,7 @@ export default function AddNews() {
       <input
         type="file"
         onChange={handleImageChange}
-        className="block border rounded p-2 w-full mt-4"
+        className="block border border-gray-300 rounded-lg p-3 w-4/5 mx-auto mb-4 text-lg"
         required
       />
 
@@ -149,14 +190,14 @@ export default function AddNews() {
           <img
             src={imagePreview}
             alt="Image Preview"
-            className="max-w-[200px] max-h-[200px] object-cover"
+            className="w-48 h-48 object-cover rounded-lg mx-auto"
           />
         </div>
       )}
 
       <button
         type="submit"
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+        className="w-4/5 mx-auto mt-6 bg-green-500 text-white py-3 rounded-lg text-lg font-bold hover:bg-green-600 transition-colors duration-200"
       >
         Add News
       </button>

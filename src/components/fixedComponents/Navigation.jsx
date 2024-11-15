@@ -20,7 +20,7 @@ const Navigation = () => {
   };
 
   return (
-    <div className="w-full h-[84px] flex justify-between items-center fixed border-b-[1px] border-b-gray-200 z-[10] bg-white px-4 md:px-8">
+    <div className="w-full h-[84px] flex justify-between items-center fixed border-b-[1px] border-b-gray-200 z-[999] bg-white px-4 md:px-8">
       <Link href="./">
         <img src={logoPng.src} className="h-[56px]" alt="LogoPng" />
       </Link>

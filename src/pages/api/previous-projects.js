@@ -8,6 +8,7 @@ dotenv.config({ path: "./config/.env" });
 
 const sql = neon(process.env.DATABASE_URL);
 
+// Multer setup for handling file uploads
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
@@ -53,6 +54,7 @@ const deleteFile = async (imageUrl) => {
   }
 };
 
+// Disable Next.js bodyParser for this API to allow Multer to work
 export const config = {
   api: {
     bodyParser: false,
@@ -62,25 +64,32 @@ export const config = {
 export default async function handler(req, res) {
   const { id } = req.query;
 
+  if (req.method === "GET") {
+    try {
+      // Handle GET request without file upload middleware
+      const data = await sql`SELECT * FROM previous_projects`;
+
+      if (data.length === 0) {
+        return res.status(200).send("empty");
+      }
+
+      res.status(200).json(data);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error retrieving projects" });
+    }
+    return; // Exit after GET request is handled
+  }
+
+  // Use the upload middleware only for POST, PUT, DELETE methods
   upload(req, res, async (err) => {
     if (err) {
-      console.error("Файл ачаалах алдаа:", err);
+      console.error("File upload error:", err);
       return res
         .status(400)
-        .json({ message: "Файл ачаалах алдаа", error: err.message });
+        .json({ message: "File upload error", error: err.message });
     }
-    if (req.method === "GET") {
-      try {
-        const data = await sql`SELECT * FROM previous_projects`;
-        if (data.length === 0) {
-          return res.status(200).send("empty");
-        }
-        res.status(200).json(data);
-      } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error retrieving members" });
-      }
-    }
+
     if (req.method === "POST") {
       const {
         project_name,
@@ -93,9 +102,7 @@ export default async function handler(req, res) {
       } = req.body;
 
       if (!project_name || !brief_description || !req.file || !project_date) {
-        return res
-          .status(400)
-          .json({ message: "Бүх талбаруудыг бөглөх шаардлагатай" });
+        return res.status(400).json({ message: "All fields are required" });
       }
 
       try {
@@ -108,64 +115,68 @@ export default async function handler(req, res) {
 
         return res
           .status(201)
-          .json({ message: "Төсөл амжилттай үүслээ", data: query });
+          .json({ message: "Project created successfully", data: query });
       } catch (error) {
-        console.error("Төсөл үүсгэх алдаа:", error);
-        return res.status(500).json({ message: "Төсөл үүсгэх алдаа", error });
-      }
-    }
-
-    if (req.method === "PUT" && id) {
-      const {
-        project_name,
-        brief_description,
-        issues,
-        work_progress,
-        results,
-        statistics,
-        project_date,
-      } = req.body;
-
-      try {
-        const project =
-          await sql`SELECT * FROM previous_projects WHERE id = ${id} LIMIT 1`;
-
-        if (project.length === 0) {
-          return res.status(404).json({ message: "Төсөл олдсонгүй" });
-        }
-
-        let imageUrl = project[0].image_url;
-
-        if (req.file) {
-          if (imageUrl) {
-            await deleteFile(imageUrl);
-          }
-          imageUrl = await uploadFile(req.file);
-        }
-
-        await sql`
-          UPDATE previous_projects
-          SET
-            project_name = ${project_name},
-            brief_description = ${brief_description},
-            issues = ${issues},
-            work_progress = ${work_progress},
-            results = ${results},
-            statistics = ${statistics},
-            image_url = ${imageUrl},
-            project_date = ${project_date}
-          WHERE id = ${id}
-          RETURNING *;
-        `;
-
+        console.error("Error creating project:", error);
         return res
-          .status(200)
-          .json({ message: "Төсөл амжилттай шинэчлэгдлээ" });
-      } catch (error) {
-        console.error("Төсөл шинэчлэх алдаа:", error);
-        return res.status(500).json({ message: "Төсөл шинэчлэх алдаа", error });
+          .status(500)
+          .json({ message: "Error creating project", error });
       }
     }
+
+  if (req.method === "PUT" && id) {
+    const {
+      project_name,
+      brief_description,
+      issues,
+      work_progress,
+      results,
+      statistics,
+      project_date,
+    } = req.body; // Destructure the form data
+
+    try {
+      // Find the existing project by ID
+      const project = await sql`SELECT * FROM previous_projects WHERE id = ${id} LIMIT 1`;
+
+      if (project.length === 0) {
+        return res.status(404).json({ message: "Project not found" });
+      }
+
+      let imageUrl = project[0].image_url; // Get the current image URL if available
+
+      // Handle file upload if a file was uploaded
+      if (req.file) {
+        if (imageUrl) {
+          // Delete the old image if there was one
+          await deleteFile(imageUrl);
+        }
+        // Upload the new file and get the new image URL
+        imageUrl = await uploadFile(req.file);
+      }
+
+      // Update the project in the database
+      await sql`
+        UPDATE previous_projects
+        SET
+          project_name = ${project_name},
+          brief_description = ${brief_description},
+          issues = ${issues},
+          work_progress = ${work_progress},
+          results = ${results},
+          statistics = ${statistics},
+          image_url = ${imageUrl},
+          project_date = ${project_date}
+        WHERE id = ${id}
+        RETURNING *;
+      `;
+
+      return res.status(200).json({ message: "Project updated successfully" });
+    } catch (error) {
+      console.error("Error updating project:", error);
+      return res.status(500).json({ message: "Error updating project", error });
+    }
+  }
 
     if (req.method === "DELETE" && id) {
       try {
@@ -173,7 +184,7 @@ export default async function handler(req, res) {
           await sql`SELECT * FROM previous_projects WHERE id = ${id} LIMIT 1`;
 
         if (project.length === 0) {
-          return res.status(404).json({ message: "Төсөл олдсонгүй" });
+          return res.status(404).json({ message: "Project not found" });
         }
 
         const imageUrl = project[0].image_url;
@@ -182,13 +193,17 @@ export default async function handler(req, res) {
         }
 
         await sql`DELETE FROM previous_projects WHERE id = ${id}`;
-        return res.status(200).json({ message: "Төсөл амжилттай устгагдлаа" });
+        return res
+          .status(200)
+          .json({ message: "Project deleted successfully" });
       } catch (error) {
-        console.error("Төсөл устгах алдаа:", error);
-        return res.status(500).json({ message: "Төсөл устгах алдаа", error });
+        console.error("Error deleting project:", error);
+        return res
+          .status(500)
+          .json({ message: "Error deleting project", error });
       }
     }
 
-    return res.status(405).json({ message: "Метод зөвшөөрөгдөхгүй" });
+    return res.status(405).json({ message: "Method not allowed" });
   });
 }

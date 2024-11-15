@@ -35,6 +35,7 @@ export async function getServerSideProps(context) {
     };
   }
 }
+
 export default function NewsList() {
   const [news, setNews] = useState([]); // State for news data
   const [loading, setLoading] = useState(true); // Track loading state
@@ -107,29 +108,39 @@ export default function NewsList() {
       >
         Add News
       </Link>
-      <ul className="mt-6 flex gap-[30px]">
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {news.map((item) => (
-          <li key={item.id} className="border-b py-4 w-[20%]">
-            <img src={item.image_url} alt={item.title} />
-            <h2 className="text-xl">{item.title}</h2>
-            <p>{item.details}</p>
-            <div className="flex gap-4">
+          <div
+            key={item.id}
+            className="border p-4 rounded-lg bg-white shadow-lg"
+          >
+            <img
+              src={item.image_url}
+              alt={item.title}
+              className="w-full h-auto rounded-lg object-cover mb-4"
+            />
+            <h2 className="text-xl font-semibold">{item.title}</h2>
+            <p
+              className="text-sm mt-2 text-gray-700 line-clamp-5"
+              dangerouslySetInnerHTML={{ __html: item.details }}
+            ></p>
+            <div className="flex gap-4 mt-4">
               <Link
                 href={`/admin/news/edit?id=${item.id}`}
-                className="text-blue-500"
+                className="text-blue-500 hover:underline"
               >
                 Edit
               </Link>
               <button
                 onClick={() => handleDelete(item.id)}
-                className="text-red-500"
+                className="text-red-500 hover:underline"
               >
                 Delete
               </button>
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

@@ -35,6 +35,7 @@ export async function getServerSideProps(context) {
     };
   }
 }
+
 export default function EditProject() {
   const router = useRouter();
   const { id } = router.query;
@@ -47,6 +48,7 @@ export default function EditProject() {
     results: "",
     statistics: "",
     image_url: "",
+    project_date: "", // Add project_date to the project state
   });
 
   const [image, setImage] = useState(null); // State to hold the new image file
@@ -54,13 +56,13 @@ export default function EditProject() {
   useEffect(() => {
     if (id) {
       const fetchProject = async () => {
-        const response = await fetch(
-          `/api/previous-projects/?id=${id}`
-        );
+        const response = await fetch(`/api/previous-projects/`);
         const data = await response.json();
 
-        if (data && data.data) {
-          const project = data.data.find((project) => project.id === id);
+        if (data.length > 0) {
+          const project = data.find((project) => project.id === id);
+          console.log(project);
+
           if (project) {
             setProject(project);
           }
@@ -103,13 +105,10 @@ export default function EditProject() {
     }
 
     // Send the PUT request with the form data
-    const response = await fetch(
-      `/api/previous-projects/?id=${id}`,
-      {
-        method: "PUT",
-        body: formData,
-      }
-    );
+    const response = await fetch(`/api/previous-projects/?id=${id}`, {
+      method: "PUT",
+      body: formData,
+    });
 
     if (response.ok) {
       router.push("/admin/projects"); // Redirect after success
@@ -118,10 +117,42 @@ export default function EditProject() {
     }
   };
 
+  const addLink = (e) => {
+    e.preventDefault();
+    setProject((prevProject) => ({
+      ...prevProject,
+      brief_description: `${prevProject.brief_description}<a style="color: #0088ff; text-decoration: underline;" href='<YOUR_LINK_HERE>'>Click here for more information</a>`,
+    }));
+  };
+
+  const newLine = (e) => {
+    e.preventDefault();
+    setProject((prevProject) => ({
+      ...prevProject,
+      brief_description: `${prevProject.brief_description}<br/><br/>`,
+    }));
+  };
+
   return (
     <div className="p-6 mt-[180px]">
       <h1 className="text-2xl font-bold">Edit Project</h1>
-
+      <div className="text-center font-semiBold my-[10px]">
+        Description add options
+      </div>
+      <div className="flex gap-4 mb-6 flex-wrap justify-center">
+        <button
+          onClick={addLink}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        >
+          Add Link
+        </button>
+        <button
+          onClick={newLine}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        >
+          New Line
+        </button>
+      </div>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -172,6 +203,16 @@ export default function EditProject() {
           value={project.statistics}
           onChange={handleChange}
           className="block border rounded p-2 w-full mt-4"
+        />
+
+        {/* Add Date Input */}
+        <input
+          type="date"
+          name="project_date"
+          value={project.project_date}
+          onChange={handleChange}
+          required
+          className="block border rounded p-4 w-full mt-4 text-lg"
         />
 
         {/* Image Upload Section */}

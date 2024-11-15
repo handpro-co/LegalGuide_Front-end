@@ -1,7 +1,7 @@
 import ShowCaseBox from "../components/layout/ShowCaseBox";
 import backgroundBannerPhoto from "../homePagesPeoplesPhoto/BannerRadialPhoto.png";
 import { useState, useEffect } from "react";
-
+import Link from "next/link";
 const PeriviousProjects = () => {
   const [projects, setProjects] = useState();
   useEffect(() => {
@@ -28,13 +28,15 @@ const PeriviousProjects = () => {
           <div className="grid grid-cols-1  md:grid-cols-2 gap-[20px]">
             {projects &&
               projects.map((item, i) => (
-                <div key={i}>
-                  <ShowCaseBox
-                    title={item.project_name}
-                    text={item.brief_description}
-                    photo={item.image_url}
-                  />
-                </div>
+                <Link key={i}  href={`./PeriviousProjectDetails/?id=${item.id}`}>
+                  <div>
+                    <ShowCaseBox
+                      title={item.project_name}
+                      text={item.brief_description}
+                      photo={item.image_url}
+                    />
+                  </div>
+                </Link>
               ))}
           </div>
           {projects && projects.length > 0 ? (

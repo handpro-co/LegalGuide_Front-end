@@ -35,6 +35,7 @@ export async function getServerSideProps(context) {
     };
   }
 }
+
 export default function EditNews() {
   const router = useRouter();
   const { id } = router.query;
@@ -68,6 +69,7 @@ export default function EditNews() {
       fetchNews();
     }
   }, [id]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNews((prev) => ({ ...prev, [name]: value }));
@@ -76,7 +78,7 @@ export default function EditNews() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(file);
+      setImage(URL.createObjectURL(file)); // Preview the selected image
     }
   };
 
@@ -92,7 +94,7 @@ export default function EditNews() {
     });
 
     if (image) {
-      formData.append("image", image);
+      formData.append("image", image); // Upload the new image
     }
 
     const response = await fetch(`/api/news/?id=${id}`, {
@@ -107,9 +109,54 @@ export default function EditNews() {
     }
   };
 
+  const addLink = (e) => {
+    e.preventDefault();
+    setNews((prev) => ({
+      ...prev,
+      details: `${prev.details}<a style="color: #0088ff; text-decoration: underline;" href="<YOUR_LINK_HERE>">Click here for more information</a>`,
+    }));
+  };
+
+  const newLine = (e) => {
+    e.preventDefault();
+    setNews((prev) => ({
+      ...prev,
+      details: `${prev.details}<br/><br/>`,
+    }));
+  };
+
+  const header = (e) => {
+    e.preventDefault();
+    setNews((prev) => ({
+      ...prev,
+      details: `${prev.details}<span style="font-size: 20px; font-weight: bold;">Гарчигаа бичих</span>`,
+    }));
+  };
+
   return (
     <div className="p-6 mt-[180px]">
       <h1 className="text-2xl font-bold">Edit News</h1>
+
+      <div className="flex gap-4 mb-6 flex-wrap justify-center">
+        <button
+          onClick={addLink}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        >
+          Add Link
+        </button>
+        <button
+          onClick={newLine}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        >
+          New Line
+        </button>
+        <button
+          onClick={header}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        >
+          Add Header
+        </button>
+      </div>
 
       <form onSubmit={handleSubmit}>
         <input
@@ -119,7 +166,7 @@ export default function EditNews() {
           value={news.title}
           onChange={handleChange}
           required
-          className="block border rounded p-2 w-full mt-4"
+          className="block border rounded p-2 w-4/5 mt-4 mx-auto"
         />
 
         <textarea
@@ -128,7 +175,7 @@ export default function EditNews() {
           value={news.details}
           onChange={handleChange}
           required
-          className="block border rounded p-2 w-full mt-4"
+          className="block border rounded p-2 w-4/5 mt-4 mx-auto"
         />
 
         <div className="mt-4">
@@ -138,21 +185,34 @@ export default function EditNews() {
             name="image"
             accept="image/*"
             onChange={handleImageChange}
-            className="block border rounded p-2 w-full"
+            className="block border rounded p-2 w-4/5 mx-auto"
           />
-          {news.image_url && !image && (
-            <img
-              src={news.image_url}
-              alt="Current News Image"
-              className="mt-4"
-              style={{ maxWidth: "100%", height: "auto" }}
-            />
+
+          {/* Display the current image if it exists */}
+          {image ? (
+            <div className="mt-4">
+              <img
+                src={image}
+                alt="Selected Preview"
+                className="rounded-lg shadow-lg max-w-full h-[1000px]"
+              />
+            </div>
+          ) : (
+            news.image_url && (
+              <div className="mt-4">
+                <img
+                  src={news.image_url}
+                  alt="Current News Image"
+                  className="rounded-lg shadow-lg max-w-full h-[1000px]"
+                />
+              </div>
+            )
           )}
         </div>
 
         <button
           type="submit"
-          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded mx-auto block"
         >
           Update News
         </button>

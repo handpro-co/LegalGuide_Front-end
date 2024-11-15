@@ -35,6 +35,7 @@ export async function getServerSideProps(context) {
     };
   }
 }
+
 export default function AddProject() {
   // State management
   const [projectName, setProjectName] = useState("");
@@ -121,10 +122,40 @@ export default function AddProject() {
     }
   };
 
-  return (
-    <form onSubmit={handleSubmit} className="p-6 mt-[180px]">
-      <h1 className="text-2xl font-bold">Add Project</h1>
+  const addLink = (e) => {
+    e.preventDefault();
+    setBriefDescription(
+      (prevDetails) =>
+        `${prevDetails}<a style="color: #0088ff; text-decoration: underline;" href='<YOUR_LINK_HERE>'>Click here for more information</a>`
+    );
+  };
 
+  const newLine = (e) => {
+    e.preventDefault();
+    setBriefDescription((prevDetails) => `${prevDetails}<br/><br/>`);
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="p-6 mt-[180px] mx-auto w-full sm:w-4/5 lg:w-4/5 max-w-4xl"
+    >
+      <h1 className="text-3xl font-bold mb-6 text-center">Add Project</h1>
+      <div className="text-center font-semiBold my-[10px]">Description add options</div>
+      <div className="flex gap-4 mb-6 flex-wrap justify-center">
+        <button
+          onClick={addLink}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        >
+          Add Link
+        </button>
+        <button
+          onClick={newLine}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        >
+          New Line
+        </button>
+      </div>
       {/* Error and success messages */}
       {error && <div className="text-red-500 mt-2">{error}</div>}
       {successMessage && (
@@ -138,7 +169,7 @@ export default function AddProject() {
         value={projectName}
         onChange={(e) => setProjectName(e.target.value)}
         required
-        className="block border rounded p-2 w-full mt-4"
+        className="block border rounded p-4 w-full mt-4 text-lg"
       />
 
       {/* Brief Description */}
@@ -147,7 +178,7 @@ export default function AddProject() {
         value={briefDescription}
         onChange={(e) => setBriefDescription(e.target.value)}
         required
-        className="block border rounded p-2 w-full mt-4"
+        className="block border rounded p-4 w-full mt-4 text-lg"
       />
 
       {/* Issues */}
@@ -155,7 +186,7 @@ export default function AddProject() {
         placeholder="Issues"
         value={issues}
         onChange={(e) => setIssues(e.target.value)}
-        className="block border rounded p-2 w-full mt-4"
+        className="block border rounded p-4 w-full mt-4 text-lg"
       />
 
       {/* Work Progress */}
@@ -163,7 +194,7 @@ export default function AddProject() {
         placeholder="Work Progress"
         value={workProgress}
         onChange={(e) => setWorkProgress(e.target.value)}
-        className="block border rounded p-2 w-full mt-4"
+        className="block border rounded p-4 w-full mt-4 text-lg"
       />
 
       {/* Results */}
@@ -171,7 +202,7 @@ export default function AddProject() {
         placeholder="Results"
         value={results}
         onChange={(e) => setResults(e.target.value)}
-        className="block border rounded p-2 w-full mt-4"
+        className="block border rounded p-4 w-full mt-4 text-lg"
       />
 
       {/* Statistics */}
@@ -179,7 +210,7 @@ export default function AddProject() {
         placeholder="Statistics"
         value={statistics}
         onChange={(e) => setStatistics(e.target.value)}
-        className="block border rounded p-2 w-full mt-4"
+        className="block border rounded p-4 w-full mt-4 text-lg"
       />
 
       {/* Project Date */}
@@ -188,7 +219,7 @@ export default function AddProject() {
         value={projectDate}
         onChange={(e) => setProjectDate(e.target.value)}
         required
-        className="block border rounded p-2 w-full mt-4"
+        className="block border rounded p-4 w-full mt-4 text-lg"
       />
 
       {/* Image Upload */}
@@ -196,7 +227,7 @@ export default function AddProject() {
         type="file"
         onChange={handleImageChange}
         accept="image/*"
-        className="block border rounded p-2 w-full mt-4"
+        className="block border rounded p-4 w-full mt-4 text-lg"
         required
       />
 
@@ -206,7 +237,7 @@ export default function AddProject() {
           <img
             src={imagePreview}
             alt="Image Preview"
-            className="max-w-[200px] max-h-[200px] object-cover"
+            className="max-w-[300px] max-h-[300px] object-cover"
           />
         </div>
       )}
@@ -214,9 +245,9 @@ export default function AddProject() {
       {/* Submit Button */}
       <button
         type="submit"
-        className={`mt-4 ${
+        className={`mt-6 ${
           loading ? "bg-gray-400" : "bg-blue-500"
-        } text-white px-4 py-2 rounded`}
+        } text-white text-lg px-6 py-3 rounded w-full`}
         disabled={loading}
       >
         {loading ? "Adding..." : "Add Project"}

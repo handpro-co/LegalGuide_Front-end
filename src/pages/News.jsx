@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import RadialBanner from "../homePagesPeoplesPhoto/BannerRadialPhoto.png";
 import NewsCard from "../components/layout/NewsCardAndBlog";
 import Image from "next/image";
+import Link from "next/link";
 
 const News = () => {
   const [onClickButton, setOnClickButton] = useState("Хуульч мазаалай");
   const [showNews, setShowNews] = useState([]);
   const [mockData, setMockData] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -22,7 +23,7 @@ const News = () => {
       } catch (error) {
         console.error("Error fetching news:", error);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
     fetchProjects();
@@ -83,13 +84,15 @@ const News = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {showNews.length > 0 ? (
             showNews.map((item) => (
-              <div key={item.id}>
-                <NewsCard
-                  title={item.title}
-                  text={item.details}
-                  image={item.image_url}
-                />
-              </div>
+              <Link key={item.id} href={`./NewsDetails/?id=${item.id}`}>
+                <div>
+                  <NewsCard
+                    title={item.title}
+                    text={item.details}
+                    image={item.image_url}
+                  />
+                </div>
+              </Link>
             ))
           ) : (
             <p className="text-center text-lg text-gray-600">
