@@ -4,15 +4,14 @@ import { useRouter } from "next/router";
 
 const Project = () => {
   const router = useRouter();
-  const { id } = router.query; // This will be undefined initially, so watch for it.
+  const { id } = router.query;
 
   const [mockData, setMockData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch project data once the id is available
   useEffect(() => {
-    if (!id) return; // Don't fetch if there's no ID
+    if (!id) return;
 
     const fetchProjects = async () => {
       try {
@@ -51,20 +50,19 @@ const Project = () => {
         ) : error ? (
           <p>Error: {error}</p>
         ) : clicked_project ? (
-          <div className="w-full max-w-screen-3xl h-full  mx-auto flex flex-col items-center px-4 sm:px-6 md:px-8 ">
+          <div className="w-full max-w-screen-4xl h-full  mx-auto flex flex-col items-center px-4 sm:px-6 md:px-8 ">
             <div
               style={{
                 backgroundImage: `url(${clicked_project.image_url})`,
-                backgroundSize: "cover", // Ensures the image covers the entire div
-                backgroundPosition: "center", // Centers the image
-                backgroundRepeat: "no-repeat", // Prevents the image from repeating
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
               }}
-              className="relative w-[80%] h-[400px] sm:h-[500px] rounded-[24px] mb-6"
+              className="relative w-[100%] h-[350px]  rounded-[24px] mb-6"
             >
-             
               <div className="absolute w-full h-full inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-[22px]"></div>
-              <div className="absolute bottom-[5%] left-[50%] transform -translate-x-1/2 z-20 text-center">
-                <div className="w-full text-white px-[10%] text-[16px] md:text-[36px] font-bold leading-tight">
+              <div className="absolute w-full bottom-[5%] left-[50%] transform -translate-x-1/2 z-20 ">
+                <div className="w-full text-white px-[5%] text-[20px] md:text-[20px] lg:text-[30px]  font-bold leading-tight text-center">
                   {clicked_project.project_name}
                 </div>
               </div>

@@ -5,6 +5,7 @@ import { Footer, Navigation } from "../components/fixedComponents";
 import "../styles/font.css";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import AdminNavigation from "./admin/AdminNavigation";
 const App = ({ Component, pageProps }) => {
   const router = useRouter();
 
@@ -53,12 +54,15 @@ const App = ({ Component, pageProps }) => {
         div
         className="flex flex-col items-center gap-[100px] w-full px-[20px] md:px-[60px] lg:px-[120px] 2xl:px-[300px]"
       >
-        {!isAdminPage && (
+        {!isAdminPage ? (
           <>
             <Chatgpt />
             <Navigation />
           </>
+        ) : (
+          <AdminNavigation />
         )}
+
         <Component {...pageProps} />
         {!isAdminPage && <Footer />}
       </div>

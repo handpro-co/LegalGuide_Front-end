@@ -1,32 +1,28 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
-import { parseCookies } from "nookies"; // Utility for parsing cookies in Next.js
+import { parseCookies } from "nookies";  
 
 export async function getServerSideProps(context) {
   const cookies = parseCookies(context);
   const token = cookies.token;
 
-  // If there is no token, redirect to the sign-in page
   if (!token) {
     return {
       redirect: {
-        destination: "/admin", // Redirect to the login page
+        destination: "/admin",
         permanent: false,
       },
     };
   }
 
   try {
-    // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // If token is valid, pass the user data to the page
     return {
-      props: { user: decoded }, // You can pass the user data if needed
+      props: { user: decoded }, 
     };
   } catch (error) {
-    // If the token is invalid, redirect to the login page
     return {
       redirect: {
         destination: "/admin",
@@ -44,8 +40,14 @@ export default function EditNews() {
     title: "",
     details: "",
     image_url: "",
+    category: "",
   });
   const [image, setImage] = useState(null);
+  const categories = [
+    "Хуульч мазаалай",
+    "Хуулийн талаар",
+    "Цаг үеийн мэдээ, мэдээлэл",
+  ];
 
   useEffect(() => {
     if (id) {
@@ -59,6 +61,7 @@ export default function EditNews() {
               title: data.title || "",
               details: data.details || "",
               image_url: data.image_url || "",
+              category: data.category || categories[0], 
             });
           }
         } catch (err) {
@@ -75,10 +78,14 @@ export default function EditNews() {
     setNews((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleCategoryChange = (e) => {
+    setNews((prev) => ({ ...prev, category: e.target.value }));
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file)); // Preview the selected image
+      setImage(file); 
     }
   };
 
@@ -86,7 +93,6 @@ export default function EditNews() {
     e.preventDefault();
 
     const formData = new FormData();
-
     Object.keys(news).forEach((key) => {
       if (news[key] !== undefined) {
         formData.append(key, news[key]);
@@ -94,7 +100,7 @@ export default function EditNews() {
     });
 
     if (image) {
-      formData.append("image", image); // Upload the new image
+      formData.append("image", image);
     }
 
     const response = await fetch(`/api/news/?id=${id}`, {
@@ -178,6 +184,19 @@ export default function EditNews() {
           className="block border rounded p-2 w-4/5 mt-4 mx-auto"
         />
 
+        <select
+          name="category"
+          value={news.category}
+          onChange={handleCategoryChange}
+          className="block border border-gray-300 rounded-lg p-3 w-4/5 mx-auto mb-4 text-lg"
+        >
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+
         <div className="mt-4">
           <label className="block mb-2">Choose Image</label>
           <input
@@ -188,11 +207,10 @@ export default function EditNews() {
             className="block border rounded p-2 w-4/5 mx-auto"
           />
 
-          {/* Display the current image if it exists */}
           {image ? (
             <div className="mt-4">
               <img
-                src={image}
+                src={URL.createObjectURL(image)}
                 alt="Selected Preview"
                 className="rounded-lg shadow-lg max-w-full h-[1000px]"
               />

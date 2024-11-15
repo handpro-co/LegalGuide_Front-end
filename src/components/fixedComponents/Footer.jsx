@@ -15,10 +15,10 @@ const Footer = () => {
   return (
     <div className="w-full   flex flex-col items-center  gap-[24px] rounded-[24px] ">
       <div className="flex flex-col gap-[24px] items-center w-full bg-[#F7F8FD] p-[24px] rounded-[24px]">
-        <div className="text-[40px] text-center font-bold">
+        <div className="text-[40px] text-center font-bold break-words">
           Таны хуулийн зөвлөх
         </div>
-        <div className="text-[18px] text-center font-medium">
+        <div className="text-[18px] text-center font-medium break-words">
           Бидэнтэй холбоо барьж, мэргэжлийн хууль зүйн зөвлөгөө аваарай.
         </div>
         <Button text={"Холбоо барих"} />
@@ -28,11 +28,11 @@ const Footer = () => {
           <div className="flex flex-wrap  w-full rounded-[24px] gap-[12px] lg:gap-[2%]">
             <div className="bg-[#fff] flex flex-col rounded-[24px] p-[24px] gap-[24px] w-full lg:w-[49%] ">
               <FiMail className="w-[32px] h-[32px] text-[#226FD8]" />
-              <div className="font-regular">info@legalguide.mn</div>
+              <div className="font-regular break-words">info@legalguide.mn</div>
             </div>
             <div className="flex bg-[#fff] rounded-[24px] flex-col p-[24px] gap-[24px] w-full lg:w-[49%] ">
               <FaPhoneAlt className="w-[32px] h-[32px] text-[#226FD8]" />
-              <div className="font-regular">+976 77770040</div>
+              <div className="font-regular break-words">+976 77770040</div>
             </div>
           </div>
           <div className="w-full">
@@ -43,7 +43,7 @@ const Footer = () => {
               className="w-full rounded-[24px] bg-[#fff] p-[24px] flex flex-col gap-[24px] hover:shadow-lg transition-shadow duration-200"
             >
               <FaEarthAsia className="w-[32px] h-[32px] text-[#226FD8]" />
-              <div className="font-regular">
+              <div className="font-regular break-words">
                 Монгол Улс, Улаанбаатар хот, Сүхбаатар дүүрэг, 1-р хороо,
                 Амбассадор оффис, 403б тоот
               </div>
