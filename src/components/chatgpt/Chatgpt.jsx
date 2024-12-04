@@ -3,7 +3,6 @@ import { BsSend } from "react-icons/bs";
 import Bear from "../../homePagesPeoplesPhoto/940815d39d4270b76e723ef85105ecab.png";
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
-
 const socket = io("https://backendlg-kznv.onrender.com/", {
   transports: ["websocket"],
 });
@@ -13,12 +12,12 @@ const Chatgpt = () => {
   const [showChat, setShowChat] = useState(false);
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
 
   const sendMessage = () => {
     if (chat.trim() === "") return;
 
-    const newMessage = { ask: chat, response: "" };
+    const newMessage = { ask: chat, response: "", isTyping: true }; // Add typing state per message
     setMessages((prevMessages) => [...prevMessages, newMessage]);
 
     try {
@@ -40,6 +39,10 @@ const Chatgpt = () => {
         newMessages[lastIndex].response += text.charAt(index);
         setMessages([...newMessages]);
         setTimeout(() => typing(index + 1, text, delay), delay);
+      } else {
+        // Stop typing animation when finished
+        newMessages[lastIndex].isTyping = false;
+        setMessages([...newMessages]);
       }
     };
 
@@ -48,6 +51,15 @@ const Chatgpt = () => {
 
   useEffect(() => {
     socket.on("response", (response) => {
+      setMessages((prevMessages) => {
+        const newMessages = [...prevMessages];
+        const lastMessage = newMessages[newMessages.length - 1];
+        if (lastMessage) {
+          lastMessage.isTyping = false; // Stop typing animation for the last message
+        }
+        return [...newMessages];
+      });
+
       typeResponse(response);
     });
 
@@ -137,14 +149,25 @@ const Chatgpt = () => {
                       className="w-[26px] h-[26px] rounded-[50%] shadow-2xl"
                     ></div>
                     <div className="mt-[5px] w-auto max-w-[70%] inline bg-[#fff] border-[1px] border-[#f4f4f4] pr-[15px] pl-[15px] pt-[12px] pb-[12px] rounded-[20px]">
-                      <div
-                        className="w-full font-regular break-words whitespace-normal text-left"
-                        dangerouslySetInnerHTML={{ __html: item.response }}
-                      />
+                      {item.isTyping ? (
+                        <div class="flex font-regular gap-[8px] items-start">
+                          <div class="w-full text-left">
+                            <div class="dot dot-1"></div>
+                            <div class="dot dot-2"></div>
+                            <div class="dot dot-3"></div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          className="w-full font-regular break-words whitespace-normal text-left"
+                          dangerouslySetInnerHTML={{ __html: item.response }}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
               ))}
+
               <div ref={messagesEndRef} />
             </div>
             <div className="w-full relative">

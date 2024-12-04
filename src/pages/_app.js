@@ -6,6 +6,8 @@ import "../styles/font.css";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import AdminNavigation from "./admin/AdminNavigation";
+import "../styles/chatGptTypingAnimationStyle.css";
+
 const App = ({ Component, pageProps }) => {
   const router = useRouter();
 
@@ -52,7 +54,7 @@ const App = ({ Component, pageProps }) => {
       </Head>
       <div
         div
-        className="flex flex-col items-center gap-[100px] w-full px-[20px] md:px-[60px] lg:px-[120px] 2xl:px-[300px]"
+        className="flex flex-col items-center gap-[100px] w-full px-[20px] md:px-[60px] lg:px-[120px] 2xl:px-[200px]"
       >
         {!isAdminPage ? (
           <>
