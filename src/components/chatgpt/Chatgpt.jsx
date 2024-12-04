@@ -3,7 +3,7 @@ import { BsSend } from "react-icons/bs";
 import Bear from "../../homePagesPeoplesPhoto/940815d39d4270b76e723ef85105ecab.png";
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
-import {marked} from "marked";
+import { marked } from "marked";
 const socket = io("https://backendlg-kznv.onrender.com/", {
   transports: ["websocket"],
 });
@@ -13,7 +13,7 @@ const Chatgpt = () => {
   const [showChat, setShowChat] = useState(false);
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   const sendMessage = () => {
     if (chat.trim() === "") return;
