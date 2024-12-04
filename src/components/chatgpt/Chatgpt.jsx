@@ -3,6 +3,7 @@ import { BsSend } from "react-icons/bs";
 import Bear from "../../homePagesPeoplesPhoto/940815d39d4270b76e723ef85105ecab.png";
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
+import {marked} from "marked";
 const socket = io("https://backendlg-kznv.onrender.com/", {
   transports: ["websocket"],
 });
@@ -29,12 +30,16 @@ const Chatgpt = () => {
     setChat("");
     setShowChat(true);
   };
-
+  const formatResponse = (text) => {
+    let cleanedText = text.replace(/【[^】]*?】/g, "");
+    let parsedHtml = marked.parse(cleanedText);
+    return parsedHtml;
+  };
   const typeResponse = (response) => {
     const lastIndex = messages.length - 1;
     const newMessages = [...messages];
 
-    const typing = (index, text, delay = 50) => {
+    const typing = (index, text, delay = 20) => {
       if (index < text.length) {
         newMessages[lastIndex].response += text.charAt(index);
         setMessages([...newMessages]);
@@ -46,7 +51,7 @@ const Chatgpt = () => {
       }
     };
 
-    typing(0, response);
+    typing(0, formatResponse(response));
   };
 
   useEffect(() => {
@@ -127,7 +132,7 @@ const Chatgpt = () => {
           </div>
 
           <div className="w-full flex flex-col justify-end h-[85%] overflow-hidden bg-[#fff] gap-[10px]">
-            <div className="w-full h-full overflow-y-scroll">
+            <div className="w-full h-full overflow-y-auto">
               {messages.map((item, i) => (
                 <div key={i} className="flex flex-col w-full">
                   <div className="flex justify-end">
