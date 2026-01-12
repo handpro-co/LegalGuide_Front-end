@@ -1,5 +1,5 @@
 import logoPng from "../../homePagesPeoplesPhoto/converted-files/logo.png";
-import TextHoverAnimate from "../layout/textHoverAnimate";
+import TextHoverAnimate from "../layout/TextHoverAnimate";
 import ButtonNoBGColor from "../layout/ButtonNoBGColor";
 import EnglishPng from "../icon/English.png";
 import Mongolia from "../icon/Mongolia";
@@ -64,28 +64,20 @@ const Navigation = () => {
             <ButtonNoBGColor text={"Холбоо барих"} />
           </Link>
         </div>
-        <div
-          onClick={changeFlagFunction}
-          className="w-[30px] h-[30px] rounded-full cursor-pointer"
-        >
-          {changeFlag ? (
-            <Mongolia className="rounded-full" />
-          ) : (
-            <img src={EnglishPng.src} alt="flag" />
-          )}
+        <div onClick={changeFlagFunction} className="w-[30px] h-[30px] rounded-full cursor-pointer">
+          {changeFlag ? <Mongolia className="rounded-full" /> : <img src={EnglishPng.src} alt="flag" />}
         </div>
         <div className="flex items-center lg:hidden">
           <button
             onClick={toggleMobileMenu}
             style={{ backgroundColor: rotate ? "#226fd8" : "#D1D5DB" }}
-            className=" w-[36px] h-[36px] flex flex-col gap-[7px] items-center justify-center rounded-[10px]"
-          >
+            className=" w-[36px] h-[36px] flex flex-col gap-[7px] items-center justify-center rounded-[10px]">
             <>
               <div
                 style={{
                   transform: rotate ? "rotate(45deg)" : "none",
                   position: rotate ? "absolute" : "static",
-                  transition: "transform 0.3s linear",
+                  transition: "transform 0.3s linear"
                 }}
                 className="w-[20px] h-[2px] bg-[#fff] "
               />
@@ -94,7 +86,7 @@ const Navigation = () => {
                   transform: rotate ? "rotate(-45deg)" : "none",
                   position: rotate ? "absolute" : "static",
 
-                  transition: "transform 0.3s linear",
+                  transition: "transform 0.3s linear"
                 }}
                 className="w-[20px] h-[2px] bg-[#fff]"
               />

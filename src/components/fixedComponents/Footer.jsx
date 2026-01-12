@@ -2,25 +2,16 @@ import { FiMail } from "react-icons/fi";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaEarthAsia } from "react-icons/fa6";
 import Button from "../layout/Button";
-import TextHoverAnimate from "../layout/textHoverAnimate";
+import TextHoverAnimate from "../layout/TextHoverAnimate";
 
 const Footer = () => {
-  const footerhoverText = [
-    "Хууль зүйн зөвлөгөө",
-    "Магадлан шинжилгээ",
-    "Өмгөөллийн үйлчилгээ",
-    "Esg",
-  ];
+  const footerhoverText = ["Хууль зүйн зөвлөгөө", "Магадлан шинжилгээ", "Өмгөөллийн үйлчилгээ", "Esg"];
 
   return (
     <div className="w-full   flex flex-col items-center  gap-[24px] rounded-[24px] ">
       <div className="flex flex-col gap-[24px] items-center w-full bg-[#F7F8FD] p-[24px] rounded-[24px]">
-        <div className="text-[40px] text-center font-bold break-words">
-          Таны хуулийн зөвлөх
-        </div>
-        <div className="text-[18px] text-center font-medium break-words">
-          Бидэнтэй холбоо барьж, мэргэжлийн хууль зүйн зөвлөгөө аваарай.
-        </div>
+        <div className="text-[40px] text-center font-bold break-words">Таны хуулийн зөвлөх</div>
+        <div className="text-[18px] text-center font-medium break-words">Бидэнтэй холбоо барьж, мэргэжлийн хууль зүйн зөвлөгөө аваарай.</div>
         <Button text={"Холбоо барих"} />
       </div>
       <div className="w-full bg-[#F7F8FD] p-[24px] rounded-[32px] flex flex-wrap lg:flex-nowrap	 gap-[50px]">
@@ -40,13 +31,9 @@ const Footer = () => {
               href="https://maps.app.goo.gl/s724wzpnwgyCurCq8"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full rounded-[24px] bg-[#fff] p-[24px] flex flex-col gap-[24px] hover:shadow-lg transition-shadow duration-200"
-            >
+              className="w-full rounded-[24px] bg-[#fff] p-[24px] flex flex-col gap-[24px] hover:shadow-lg transition-shadow duration-200">
               <FaEarthAsia className="w-[32px] h-[32px] text-[#226FD8]" />
-              <div className="font-regular break-words">
-                Монгол Улс, Улаанбаатар хот, Сүхбаатар дүүрэг, 1-р хороо,
-                Амбассадор оффис, 403б тоот
-              </div>
+              <div className="font-regular break-words">Монгол Улс, Улаанбаатар хот, Сүхбаатар дүүрэг, 1-р хороо, Амбассадор оффис, 403б тоот</div>
             </a>
           </div>
         </div>
